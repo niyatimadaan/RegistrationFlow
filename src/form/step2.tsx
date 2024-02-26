@@ -23,7 +23,7 @@ const addressSchema = yup.object().shape({
 
 const Step2 = () => {
     const dispatch = useDispatch();
-    // const [countries, setCountries] = useState<Country[]>([]);
+    const [countries, setCountries] = useState<Country[]>([]);
   const [formState, setFormState] = useState({
     address: "",
     state: "",
@@ -31,7 +31,6 @@ const Step2 = () => {
     country: "",
     pincode: "",
   });
-  let countries: readonly any[]=[];
 
   useEffect(() => {
     const fetchCountries = async () => {
@@ -41,8 +40,8 @@ const Step2 = () => {
           throw new Error("Error fetching countries");
         }
         const data: Country[] = await response.json();
-        // setCountries(data);
-        countries=data;
+        console.log(data);
+        setCountries(data);
       } catch (err: any) {
         console.log(err.message);
       }
