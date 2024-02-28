@@ -1,50 +1,42 @@
-import React, { useEffect, useRef } from 'react';
-import { useSelector } from 'react-redux';
-import { User } from './formSlice';
-import 'datatables.net';
-import $ from 'jquery';
+import DataTables, { Config } from "datatables.net-dt";
+import { useEffect, useRef } from "react";
+import { User } from "./formSlice";
+import { useSelector } from "react-redux";
 
-const UserTable = () => {
- const users = useSelector( (state: { form:{ users: User[] }  }) => ({
-  users: state.form.users, // Assuming secondFormData is an array of user data
-}));
- const tableRef = useRef(null);
+const EmployeeTable = () => {
+  const users = useSelector( (state: { form:{ users: User[] }  }) => ({
+      users: state.form.users, // Assuming secondFormData is an array of user data
+    }));
 
- useEffect(() => {
-    if (tableRef.current) {
-      // const $dt: JQuery & { DataTable?: any } = $('#my-table-id'); // DataTable is an optional property
-      // $dt.DataTable();
-      $(tableRef.current).DataTable();
-    }
- }, []);
+    const columns = [
+      { data: "name", title: "Name" },
+      { data: "age", title: "Age" },
+      { data: "sex", title: "Sex" },
+      { data: "mobile", title: "Mobile" },
+      { data: "idType", title: "ID Type" },
+      { data: "idNumber", title: "ID Number" },
+      { data: "address", title: "Address" },
+      { data: "state", title: "State" },
+      { data: "city", title: "City" },
+      { data: "country", title: "Country" },
+      { data: "pincode", title: "Pincode" },
+     ];     
 
- return (
-    <table ref={tableRef}>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Age</th>
-          <th>Sex</th>
-          <th>Mobile</th>
-          <th>Govt Issued ID Type</th>
-          <th>Govt Issued ID</th>
-          {/* Add more headers as necessary */}
-        </tr>
-      </thead>
-      <tbody>
-        {users.users.map((user: User, index) => (
-          <tr key={index}>
-            <td>{user.name}</td>
-            <td>{user.age}</td>
-            <td>{user.sex}</td>
-            <td>{user.mobile}</td>
-            <td>{user.idType}</td>
-            <td>{user.idNumber}</td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
- );
+  return <ReactDataTables data={users.users} columns={columns} />;
 };
 
-export default UserTable;
+export default EmployeeTable;
+
+
+function ReactDataTables({ ...props }: Config) {
+  const tableRef = useRef<HTMLTableElement>(null);
+
+  useEffect(() => {
+    const dt = new DataTables(tableRef.current!, props);
+    return () => {
+      dt.destroy();
+    };
+  }, []);
+
+  return <table ref={tableRef} className="employee-table"></table>;
+}
