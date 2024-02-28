@@ -54,6 +54,7 @@ const Step1: React.FC<StepComponentProps> = ({ setStep }) => {
       setStep(2);
       // Proceed to Step  2
     } catch (err: any) {
+      alert(err.errors);
       console.log(err.errors); // Handle validation errors
     }
   };

@@ -68,6 +68,7 @@ const Step2: React.FC<StepComponentProps> = ({ setStep }) => {
       dispatch(submitSecondForm(formState));
       setStep(3);
     } catch (err: any) {
+      alert(err.errors);
       console.log(err.errors); // Handle validation errors
     }
   };
