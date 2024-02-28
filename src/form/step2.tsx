@@ -27,7 +27,7 @@ const addressSchema = yup.object().shape({
 
 const Step2: React.FC<StepComponentProps> = ({ setStep }) => {
   const dispatch = useDispatch();
-  const [countries, setCountries] = useState<Country[]>([]);
+  const [countries, setCountries] = useState<string[]>([]);
   const [formState, setFormState] = useState({
     address: "",
     state: "",
@@ -45,7 +45,7 @@ const Step2: React.FC<StepComponentProps> = ({ setStep }) => {
         }
         const data: Country[] = await response.json();
         console.log(data);
-        setCountries(data);
+        setCountries(data.map(d => d.name.common))
       } catch (err: any) {
         console.log(err.message);
       }
@@ -62,6 +62,7 @@ const Step2: React.FC<StepComponentProps> = ({ setStep }) => {
   };
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
+    e.preventDefault();
     try {
       await addressSchema.validate(formState, { abortEarly: false });
       dispatch(submitSecondForm(formState));
@@ -120,7 +121,7 @@ const Step2: React.FC<StepComponentProps> = ({ setStep }) => {
           <Grid item xs={6} my={2}>
             <Autocomplete
               options={countries}
-              getOptionLabel={(option) => option.name.common}
+              getOptionLabel={(option) => option}
               onChange={handleCountryChange}
               renderInput={(params) => (
                 <TextField {...params} label="Country" />
